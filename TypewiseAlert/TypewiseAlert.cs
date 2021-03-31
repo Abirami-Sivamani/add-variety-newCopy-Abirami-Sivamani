@@ -11,6 +11,7 @@ namespace TypewiseAlert
             TOO_LOW,
             TOO_HIGH
         };
+        
         public enum CoolingType
         {
             PASSIVE_COOLING,
@@ -53,12 +54,12 @@ namespace TypewiseAlert
             public Dictionary<AlertTarget, String> _AlertTargetType = new Dictionary<AlertTarget, String>();
             public AlertTargetType(BreachType breachType)
             {
-                _AlertTargetType.Add(AlertTarget.TO_CONTROLLER, sendToController(breachType));
-                _AlertTargetType.Add(AlertTarget.TO_EMAIL, sendToEmail(breachType));
+                _AlertTargetType.Add(AlertTarget.TO_CONTROLLER, SendToController(breachType));
+                _AlertTargetType.Add(AlertTarget.TO_EMAIL, SendToEmail(breachType));
             }
         }
 
-        public static BreachType inferBreach(double value, double lowerLimit, double upperLimit) {
+        public static BreachType InferBreach(double value, double lowerLimit, double upperLimit) {
         if (value < lowerLimit) {
             return BreachType.TOO_LOW;
         }
@@ -68,10 +69,10 @@ namespace TypewiseAlert
         return BreachType.NORMAL;
         }
 
-        public static BreachType classifyTemperatureBreach(CoolingType coolingType, double temperatureInC) 
+        public static BreachType ClassifyTemperatureBreach(CoolingType coolingType, double temperatureInC) 
         {
           ExtremeLimit _extremeLimit = new CoolingLimitDictionaryInitializer()._CoolingLimitType[coolingType]().SetExtremeLimit(coolingType);
-          return inferBreach(temperatureInC, _extremeLimit.lowerLimit, _extremeLimit.upperLimit);
+          return InferBreach(temperatureInC, _extremeLimit.lowerLimit, _extremeLimit.upperLimit);
         }
 
         public class ExtremeLimit
@@ -126,19 +127,19 @@ namespace TypewiseAlert
           public string brand;
         }
 
-        public static void checkAndAlert(AlertTarget alertTarget, BatteryCharacter batteryChar, double temperatureInC) 
+        public static void CheckAndAlert(AlertTarget alertTarget, BatteryCharacter batteryChar, double temperatureInC) 
         {
-          BreachType breachType = classifyTemperatureBreach(batteryChar.coolingType, temperatureInC);
+          BreachType breachType = ClassifyTemperatureBreach(batteryChar.coolingType, temperatureInC);
           string result = new AlertTargetType(breachType)._AlertTargetType[alertTarget];
         }
 
-        public static String sendToController(BreachType breachType) {
+        public static String SendToController(BreachType breachType) {
           const ushort header = 0xfeed;
           Console.WriteLine("{} : {}\n", header, breachType);
           return "Done";
         }
 
-        public static String sendToEmail(BreachType breachType) {
+        public static String SendToEmail(BreachType breachType) {
           string recepient = "a.b@c.com";
           new EmailMessageInitializer()._Email[breachType]().TriggerEmail(recepient, breachType);
           return "Done";
