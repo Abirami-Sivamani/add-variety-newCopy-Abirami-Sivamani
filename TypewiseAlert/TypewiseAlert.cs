@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 namespace TypewiseAlert
 {
@@ -9,7 +9,21 @@ namespace TypewiseAlert
       TOO_LOW,
       TOO_HIGH
     };
-    public static BreachType inferBreach(double value, double lowerLimit, double upperLimit) {
+    
+    public enum CoolingType
+    {
+        PASSIVE_COOLING,
+        HI_ACTIVE_COOLING,
+        MED_ACTIVE_COOLING
+    };
+
+    public enum AlertTarget
+    {
+        TO_CONTROLLER,
+        TO_EMAIL
+    };
+
+  public static BreachType inferBreach(double value, double lowerLimit, double upperLimit) {
       if(value < lowerLimit) {
         return BreachType.TOO_LOW;
       }
@@ -18,45 +32,67 @@ namespace TypewiseAlert
       }
       return BreachType.NORMAL;
     }
-    public enum CoolingType {
-      PASSIVE_COOLING,
-      HI_ACTIVE_COOLING,
-      MED_ACTIVE_COOLING
-    };
-    public static BreachType classifyTemperatureBreach(
-        CoolingType coolingType, double temperatureInC) {
-      int lowerLimit = 0;
-      int upperLimit = 0;
-      switch(coolingType) {
-        case CoolingType.PASSIVE_COOLING:
-          lowerLimit = 0;
-          upperLimit = 35;
-          break;
-        case CoolingType.HI_ACTIVE_COOLING:
-          lowerLimit = 0;
-          upperLimit = 45;
-          break;
-        case CoolingType.MED_ACTIVE_COOLING:
-          lowerLimit = 0;
-          upperLimit = 40;
-          break;
-      }
-      return inferBreach(temperatureInC, lowerLimit, upperLimit);
+
+    public static BreachType classifyTemperatureBreach(CoolingType coolingType, double temperatureInC) {
+      ExtremeLimit _extremeLimit = new PassiveCoolingLimit().SetExtremeLimit(coolingType);
+      return inferBreach(temperatureInC, _extremeLimit.lowerLimit, _extremeLimit.upperLimit);
     }
-    public enum AlertTarget{
-      TO_CONTROLLER,
-      TO_EMAIL
-    };
+
+    class ExtremeLimit
+    {
+        public int lowerLimit { get; set; }
+        public int upperLimit { get; set; }
+    }
+    
+    interface ILimitInitializer
+    {
+            ExtremeLimit SetExtremeLimit(CoolingType coolingType);
+    }
+
+    class PassiveCoolingLimit : ILimitInitializer
+    {
+        public ExtremeLimit SetExtremeLimit(CoolingType coolingType)
+        {
+            return new ExtremeLimit()
+            {
+                lowerLimit = 0,
+                upperLimit = 35
+            };
+        }
+    }
+
+    class HighCoolingLimit : ILimitInitializer
+    {
+        public ExtremeLimit SetExtremeLimit(CoolingType coolingType)
+        {
+            return new ExtremeLimit()
+            {
+                lowerLimit = 0,
+                upperLimit = 45
+            };
+        }
+    }
+
+    class MediumCoolingLimit : ILimitInitializer
+    {
+        public ExtremeLimit SetExtremeLimit(CoolingType coolingType)
+        {
+            return new ExtremeLimit()
+            {
+                lowerLimit = 0,
+                upperLimit = 35
+            };
+        }
+    }
+
     public struct BatteryCharacter {
       public CoolingType coolingType;
       public string brand;
     }
-    public static void checkAndAlert(
-        AlertTarget alertTarget, BatteryCharacter batteryChar, double temperatureInC) {
-
-      BreachType breachType = classifyTemperatureBreach(
-        batteryChar.coolingType, temperatureInC
-      );
+    
+    public static void checkAndAlert(AlertTarget alertTarget, BatteryCharacter batteryChar, double temperatureInC) 
+    {
+      BreachType breachType = classifyTemperatureBreach(batteryChar.coolingType, temperatureInC);
 
       switch(alertTarget) {
         case AlertTarget.TO_CONTROLLER:
@@ -67,10 +103,12 @@ namespace TypewiseAlert
           break;
       }
     }
+    
     public static void sendToController(BreachType breachType) {
       const ushort header = 0xfeed;
       Console.WriteLine("{} : {}\n", header, breachType);
     }
+    
     public static void sendToEmail(BreachType breachType) {
       string recepient = "a.b@c.com";
       switch(breachType) {
