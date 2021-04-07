@@ -1,5 +1,6 @@
 using System;
 using Xunit;
+using static TypewiseAlert.TypewiseAlert;
 
 namespace TypewiseAlert.Test
 {
@@ -8,9 +9,9 @@ namespace TypewiseAlert.Test
     [Fact]
     public void InfersBreachAsPerLimits()
     {
-       Assert.True(TypewiseAlert.InferBreach(12, 20, 30) == TypewiseAlert.BreachType.TOO_LOW);
-       Assert.True(TypewiseAlert.InferBreach(35, 20, 30) == TypewiseAlert.BreachType.TOO_HIGH);
-       Assert.True(TypewiseAlert.InferBreach(22, 20, 30) == TypewiseAlert.BreachType.NORMAL);
+        Assert.True(InferBreach(12, 20, 30) == BreachType.TOO_LOW);
+        Assert.True(InferBreach(35, 20, 30) == BreachType.TOO_HIGH);
+        Assert.True(InferBreach(22, 20, 30) == BreachType.NORMAL);
     }
     
     [Fact]
