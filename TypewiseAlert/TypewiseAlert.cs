@@ -23,7 +23,8 @@ namespace TypewiseAlert
         {
             TO_CONTROLLER,
             TO_EMAIL,
-            TO_CONSOLE
+            TO_CONSOLE,
+            TO_FAKE_EMAIL
         };
 
         public class CoolingLimitDictionaryInitializer
@@ -58,17 +59,12 @@ namespace TypewiseAlert
                 _AlertTargetType.Add(AlertTarget.TO_CONTROLLER, (() => SendToController(breachType)));
                 _AlertTargetType.Add(AlertTarget.TO_EMAIL, (() => SendToEmail(breachType)));
                 _AlertTargetType.Add(AlertTarget.TO_CONSOLE, (() => SendToConsole(breachType)));
+                _AlertTargetType.Add(AlertTarget.TO_FAKE_EMAIL, (() => SendToFakeEmail(breachType)));
             }
         }
 
         public static BreachType InferBreach(double value, double lowerLimit, double upperLimit) {
-        if (value < lowerLimit) {
-            return BreachType.TOO_LOW;
-        }
-        if (value > upperLimit) {
-            return BreachType.TOO_HIGH;
-        }
-        return BreachType.NORMAL;
+            return (value < lowerLimit) ? BreachType.TOO_LOW : (value > upperLimit) ? BreachType.TOO_HIGH : BreachType.NORMAL;
         }
 
         public static BreachType ClassifyTemperatureBreach(CoolingType coolingType, double temperatureInC) 
@@ -148,6 +144,12 @@ namespace TypewiseAlert
         public static void SendToConsole(BreachType breachType)
         {
             Console.WriteLine("Temperature state: " + breachType);
+        }
+        
+        public static void SendToFakeEmail(BreachType breachType)
+        {
+            string recepient = "a.b@c.com";
+            new FakeEmailMessage().TriggerEmail(recepient, breachType);
         }
 
         public interface IEmailTrigger
