@@ -183,5 +183,14 @@ namespace TypewiseAlert
                 Console.WriteLine("Hi, the temperature is in normal state\n");
             }
         }
+        
+        public class FakeEmailMessage : IEmailTrigger
+        {
+            public static bool IsTriggerEmailCalledAtleastOnce = false;
+            public void TriggerEmail(string Recepient, BreachType _BreachType)
+            {
+                IsTriggerEmailCalledAtleastOnce = true;
+            }
+        }
     }
 }
