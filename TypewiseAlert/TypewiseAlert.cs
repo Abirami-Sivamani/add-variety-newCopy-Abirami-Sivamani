@@ -52,11 +52,12 @@ namespace TypewiseAlert
 
         public class AlertTargetType
         {
-            public Dictionary<AlertTarget, String> _AlertTargetType = new Dictionary<AlertTarget, String>();
+            public Dictionary<AlertTarget, Action> _AlertTargetType = new Dictionary<AlertTarget, Action>();
             public AlertTargetType(BreachType breachType)
             {
-                _AlertTargetType.Add(AlertTarget.TO_CONTROLLER, SendToController(breachType));
-                _AlertTargetType.Add(AlertTarget.TO_EMAIL, SendToEmail(breachType));
+                _AlertTargetType.Add(AlertTarget.TO_CONTROLLER, (() => SendToController(breachType)));
+                _AlertTargetType.Add(AlertTarget.TO_EMAIL, (() => SendToEmail(breachType)));
+                _AlertTargetType.Add(AlertTarget.TO_CONSOLE, (() => SendToConsole(breachType)));
             }
         }
 
@@ -131,19 +132,22 @@ namespace TypewiseAlert
         public static void CheckAndAlert(AlertTarget alertTarget, BatteryCharacter batteryChar, double temperatureInC) 
         {
           BreachType breachType = ClassifyTemperatureBreach(batteryChar.coolingType, temperatureInC);
-          string result = new AlertTargetType(breachType)._AlertTargetType[alertTarget];
+          new AlertTargetType(breachType)._AlertTargetType[alertTarget]();
         }
 
-        public static String SendToController(BreachType breachType) {
+        public static void SendToController(BreachType breachType) {
           const ushort header = 0xfeed;
           Console.WriteLine("{} : {}\n", header, breachType);
-          return "Done";
         }
 
-        public static String SendToEmail(BreachType breachType) {
+        public static void SendToEmail(BreachType breachType) {
           string recepient = "a.b@c.com";
           new EmailMessageInitializer()._Email[breachType]().TriggerEmail(recepient, breachType);
-          return "Done";
+        }
+        
+        public static void SendToConsole(BreachType breachType)
+        {
+            Console.WriteLine("Temperature state: " + breachType);
         }
 
         public interface IEmailTrigger
