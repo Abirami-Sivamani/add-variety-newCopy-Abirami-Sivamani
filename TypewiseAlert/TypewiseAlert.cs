@@ -22,7 +22,8 @@ namespace TypewiseAlert
         public enum AlertTarget
         {
             TO_CONTROLLER,
-            TO_EMAIL
+            TO_EMAIL,
+            TO_CONSOLE
         };
 
         public class CoolingLimitDictionaryInitializer
@@ -117,7 +118,7 @@ namespace TypewiseAlert
                 return new ExtremeLimit()
                 {
                     lowerLimit = 0,
-                    upperLimit = 35
+                    upperLimit = 40
                 };
             }
         }
