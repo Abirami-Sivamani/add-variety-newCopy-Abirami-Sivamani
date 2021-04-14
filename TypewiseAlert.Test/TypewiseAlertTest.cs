@@ -83,6 +83,12 @@ namespace TypewiseAlert.Test
     }
     
     [Fact]
+    public void AlertNotifierTypeTest()
+    {
+        Assert.NotNull(new AlertNotifierType()._NotifierType[AlertTarget.TO_CONSOLE]());
+    }
+    
+    [Fact]
     public void PassiveCoolingForExtremeLimitTest()
     {
         Assert.NotNull(new PassiveCoolingLimit().SetExtremeLimit(CoolingType.PASSIVE_COOLING));
