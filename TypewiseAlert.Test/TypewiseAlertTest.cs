@@ -105,6 +105,34 @@ namespace TypewiseAlert.Test
     {
         Assert.NotNull(new PassiveCoolingLimit().SetExtremeLimit(CoolingType.HI_ACTIVE_COOLING));
     }
+    
+    [Fact]
+    public void EmailNotifierNoExceptionTest()
+    {
+        var _exception = Record.Exception(() => new EmailNotifier().TriggerNotification(BreachType.NORMAL));
+        Assert.Null(_exception);
+    }
+
+    [Fact]
+    public void HighLimitEmailNoExceptionTest()
+    {
+        var _exception = Record.Exception(() => new HighLimitMessageEmail().TriggerEmail("user@bcn.com", BreachType.NORMAL));
+        Assert.Null(_exception);
+    }
+
+    [Fact]
+    public void LowLimitEmailNoExceptionTest()
+    {          
+        var _exception = Record.Exception(() => new LowLimitMessageEmail().TriggerEmail("user@bcn.com", BreachType.TOO_HIGH));
+        Assert.Null(_exception);
+    }
+
+    [Fact]
+    public void NormalLimitEmailNoExceptionTest()
+    {
+        var _exception = Record.Exception(() => new NormalLimitMessageEmail().TriggerEmail("user@bcn.com", BreachType.TOO_LOW));
+        Assert.Null(_exception);
+    }
 
   }
 }
