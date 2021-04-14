@@ -28,29 +28,29 @@ namespace TypewiseAlert.Notifiers
 
     }
 
-    class LowLimitMessageEmail : IEmailTrigger
+    public class LowLimitMessageEmail : IEmailTrigger
     {
         public void TriggerEmail(string Recepient, BreachType _BreachType)
         {
-            Console.WriteLine("To: {}\n", Recepient);
+            Console.WriteLine("To:\n", Recepient);
             Console.WriteLine("Hi, the temperature is too low\n");
         }
     }
 
-    class HighLimitMessageEmail : IEmailTrigger
+    public class HighLimitMessageEmail : IEmailTrigger
     {
         public void TriggerEmail(string Recepient, BreachType _BreachType)
         {
-            Console.WriteLine("To: {}\n", Recepient);
+            Console.WriteLine("To:\n", Recepient);
             Console.WriteLine("Hi, the temperature is too high\n");
         }
     }
 
-    class NormalLimitMessageEmail : IEmailTrigger
+    public class NormalLimitMessageEmail : IEmailTrigger
     {
         public void TriggerEmail(string Recepient, BreachType _BreachType)
         {
-            Console.WriteLine("To: {}\n", Recepient);
+            Console.WriteLine("To:\n", Recepient);
             Console.WriteLine("Hi, the temperature is in normal state\n");
         }
     }
