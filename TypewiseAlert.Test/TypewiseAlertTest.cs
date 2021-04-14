@@ -81,6 +81,24 @@ namespace TypewiseAlert.Test
         var _coolingClassType = new CoolingLimitDictionaryInitializer()._CoolingLimitType[CoolingType.PASSIVE_COOLING]();
         Assert.NotNull(_coolingClassType);
     }
+    
+    [Fact]
+    public void PassiveCoolingForExtremeLimitTest()
+    {
+        Assert.NotNull(new PassiveCoolingLimit().SetExtremeLimit(CoolingType.PASSIVE_COOLING));
+    }
+
+    [Fact]
+    public void MediumCoolingForExtremeLimitTest()
+    {
+        Assert.NotNull(new PassiveCoolingLimit().SetExtremeLimit(CoolingType.MED_ACTIVE_COOLING));
+    }
+
+    [Fact]
+    public void HighCoolingForExtremeLimitTest()
+    {
+        Assert.NotNull(new PassiveCoolingLimit().SetExtremeLimit(CoolingType.HI_ACTIVE_COOLING));
+    }
 
   }
 }
