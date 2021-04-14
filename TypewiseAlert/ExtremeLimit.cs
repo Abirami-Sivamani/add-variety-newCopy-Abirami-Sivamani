@@ -24,7 +24,7 @@ namespace TypewiseAlert
         public int upperLimit { get; set; }
     }
 
-    class PassiveCoolingLimit : ILimitInitializer
+    public class PassiveCoolingLimit : ILimitInitializer
     {
         public ExtremeLimit SetExtremeLimit(CoolingType coolingType)
         {
@@ -36,7 +36,7 @@ namespace TypewiseAlert
         }
     }
 
-    class HighCoolingLimit : ILimitInitializer
+    public class HighCoolingLimit : ILimitInitializer
     {
         public ExtremeLimit SetExtremeLimit(CoolingType coolingType)
         {
@@ -48,7 +48,7 @@ namespace TypewiseAlert
         }
     }
 
-    class MediumCoolingLimit : ILimitInitializer
+    public class MediumCoolingLimit : ILimitInitializer
     {
         public ExtremeLimit SetExtremeLimit(CoolingType coolingType)
         {
