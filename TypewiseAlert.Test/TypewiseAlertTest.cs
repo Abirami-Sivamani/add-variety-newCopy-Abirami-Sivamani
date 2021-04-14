@@ -6,37 +6,66 @@ namespace TypewiseAlert.Test
 {
   public class TypewiseAlertTest
   {
+
     [Fact]
-    public void InfersBreachAsPerLimits()
+    public void InfersBreachForLowLimit()
     {
         Assert.True(InferBreach(12, 20, 30) == BreachType.TOO_LOW);
+    }
+
+    [Fact]
+    public void InfersBreachForHighLimit()
+    {
         Assert.True(InferBreach(35, 20, 30) == BreachType.TOO_HIGH);
+    }
+
+    [Fact]
+    public void InfersBreachForNormal()
+    {
         Assert.True(InferBreach(22, 20, 30) == BreachType.NORMAL);
     }
-    
+
     [Fact]
     public void ClassifyTemperatureBreachForPassiveCooling()
     {
         Assert.True(ClassifyTemperatureBreach(CoolingType.PASSIVE_COOLING, -5) == BreachType.TOO_LOW);
-        Assert.True(ClassifyTemperatureBreach(CoolingType.PASSIVE_COOLING, 40) == BreachType.TOO_HIGH);
-        Assert.True(ClassifyTemperatureBreach(CoolingType.PASSIVE_COOLING, 30) == BreachType.NORMAL);
     }
 
     [Fact]
     public void ClassifyTemperatureBreachForMediumCooling()
     {
-        Assert.True(ClassifyTemperatureBreach(CoolingType.MED_ACTIVE_COOLING, -5) == BreachType.TOO_LOW);
         Assert.True(ClassifyTemperatureBreach(CoolingType.MED_ACTIVE_COOLING, 45) == BreachType.TOO_HIGH);
-        Assert.True(ClassifyTemperatureBreach(CoolingType.MED_ACTIVE_COOLING, 38) == BreachType.NORMAL);
     }
 
     [Fact]
     public void ClassifyTemperatureBreachForHighCooling()
     {
-        Assert.True(ClassifyTemperatureBreach(CoolingType.HI_ACTIVE_COOLING, -5) == BreachType.TOO_LOW);
-        Assert.True(ClassifyTemperatureBreach(CoolingType.HI_ACTIVE_COOLING, 50) == BreachType.TOO_HIGH);
         Assert.True(ClassifyTemperatureBreach(CoolingType.HI_ACTIVE_COOLING, 42) == BreachType.NORMAL);
     }
-    
+
+    [Fact]
+    public void EmailNotificationTest()
+    {
+        var Email = new FakeEmailNotifier();
+        Email.TriggerNotification(BreachType.TOO_HIGH);
+        Assert.True(Email.IsEmailTriggerNotificationCalled);
+    }
+
+    [Fact]
+    public void ConsoleNotificationTest()
+    {
+        var Console = new FakeConsoleNotifier();
+        Console.TriggerNotification(BreachType.TOO_LOW);
+        Assert.True(Console.IsConsoleTriggerNotificationCalled);
+    }
+
+    [Fact]
+    public void ControllerNotificationTest()
+    {
+        var Controller = new FakeControllerNotifier();
+        Controller.TriggerNotification(BreachType.NORMAL);
+        Assert.True(Controller.IsControllerTriggerNotificationCalled);
+    }
+
   }
 }
