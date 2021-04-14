@@ -67,6 +67,20 @@ namespace TypewiseAlert.Test
         Controller.TriggerNotification(BreachType.NORMAL);
         Assert.True(Controller.IsControllerTriggerNotificationCalled);
     }
+    
+    [Fact]
+    public void EmailMessageTypeInitializerTest()
+    {
+        var _emailClassType = new EmailMessageInitializer()._Email[BreachType.TOO_HIGH]();
+        Assert.NotNull(_emailClassType);
+    }
+
+    [Fact]
+    public void CoolingTypeInitializerTest()
+    {
+        var _coolingClassType = new CoolingLimitDictionaryInitializer()._CoolingLimitType[CoolingType.PASSIVE_COOLING]();
+        Assert.NotNull(_coolingClassType);
+    }
 
   }
 }
