@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using TypewiseAlert.Interfaces;
 using TypewiseAlert.Notifiers;
 using static TypewiseAlert.TypewiseAlert;
