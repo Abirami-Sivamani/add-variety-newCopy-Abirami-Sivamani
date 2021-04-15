@@ -51,14 +51,7 @@ namespace TypewiseAlert
         public static void CheckAndAlert(AlertTarget alertTarget, BatteryCharacter batteryChar, double temperatureInC) 
         {
             BreachType breachType = ClassifyTemperatureBreach(batteryChar.coolingType, temperatureInC);
-            if (Convert.ToBoolean(ConfigurationManager.AppSettings["TestingEnvironment"]))
-            {
-                new FakeAlertNotifierType()._NotifierType[alertTarget]().TriggerNotification(breachType);
-            }
-            else
-            {
-                new AlertNotifierType()._NotifierType[alertTarget]().TriggerNotification(breachType);
-            }
+            new AlertNotifierType()._NotifierType[alertTarget]().TriggerNotification(breachType);
         }
               
     }
