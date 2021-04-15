@@ -4,7 +4,7 @@ using TypewiseAlert.Interfaces;
 using TypewiseAlert.Notifiers;
 using static TypewiseAlert.TypewiseAlert;
 
-namespace TypewiseAlert
+namespace TypewiseAlert 
 {
     public class TypewiseAlert
     {
