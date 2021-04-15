@@ -69,6 +69,13 @@ namespace TypewiseAlert.Test
     }
     
     [Fact]
+    public void CheckAndAlertTest()
+    {
+        var _exception = Record.Exception(() => CheckAndAlert(AlertTarget.TO_CONSOLE,new BatteryCharacter { brand = "XYZ", coolingType = CoolingType.MED_ACTIVE_COOLING},-5));
+        Assert.Null(_exception);
+    }
+    
+    [Fact]
     public void EmailMessageTypeInitializerTest()
     {
         var _emailClassType = new EmailMessageInitializer()._Email[BreachType.TOO_HIGH]();
